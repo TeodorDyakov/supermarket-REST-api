@@ -27,6 +27,15 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Item> createItem(@RequestParam String name, @RequestParam Double price, @RequestParam String type) {
+
+        if(name.length() > 64){
+            throw new InvalidDataException("name exceeds max length of 64!");
+        }
+
+        if(price < 0.01 || price > 9999.99){
+            throw new InvalidDataException("price should be between 0.01 and 9999.99 !");
+        }
+
         boolean anyMatches = Arrays.stream(ItemType.values()).anyMatch(typeOfItem -> type.equals(typeOfItem.name()));
 
         if(!anyMatches){

@@ -28,6 +28,14 @@ public class SupermarketController {
     @PostMapping
     public ResponseEntity<Supermarket> createSupermarket(@RequestParam String name, @RequestParam String address,
                                                          @RequestParam String phoneNumber, @RequestParam String workingHours) {
+        if(address.length() > 128){
+            throw new InvalidDataException("Address exceeds max length of 128!");
+        }
+
+        if(name.length() > 64){
+            throw new InvalidDataException("Name exceeds max length of 64!");
+        }
+
         if(!phoneNumber.matches("08[7-9][0-9]{7}")){
             throw new InvalidDataException("phone number is invalid!");
         }
