@@ -5,6 +5,7 @@ import com.example.supermarketapi.dto.SupermarketInfoDTO;
 import com.example.supermarketapi.exception.InvalidDataException;
 import com.example.supermarketapi.model.Supermarket;
 import com.example.supermarketapi.service.SupermarketService;
+import com.example.supermarketapi.validation.WorkingTimeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,11 @@ public class SupermarketController {
         if(!phoneNumber.matches("08[7-9][0-9]{7}")){
             throw new InvalidDataException("phone number is invalid!");
         }
+
+        if(!WorkingTimeValidator.isValid(workingHours)){
+            throw new InvalidDataException("working hours are invalid!");
+        }
+
         Supermarket supermarket = new Supermarket();
         supermarket.setName(name);
         supermarket.setAddress(address);
