@@ -2,8 +2,8 @@ package com.example.supermarketapi.controller;
 
 import com.example.supermarketapi.dto.PurchaseDTO;
 import com.example.supermarketapi.exception.InvalidDataException;
-import com.example.supermarketapi.model.PaymentType;
 import com.example.supermarketapi.model.Purchase;
+import com.example.supermarketapi.model.enums.PaymentType;
 import com.example.supermarketapi.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,18 +26,22 @@ public class PurchaseController {
 
     @PostMapping
     public ResponseEntity<PurchaseDTO> buyItemsFromSupermarket(@RequestParam String supermarketId, @RequestParam List<String> itemIDs,
-                                                               @RequestParam PaymentType type,
-                                                               @RequestParam (required = false)Double cashAmount) {
-        if(type == PaymentType.CASH && cashAmount == null){
+                                                               @RequestParam String type,
+                                                               @RequestParam(required = false) Double cashAmount) {
+        if(!type.equals("CASH") && !type.equals("CARD")){
+            throw new InvalidDataException("invalid type of payment! Valid are CARD and CASH");
+        }
+        PaymentType paymentType = PaymentType.valueOf(type);
+        if (paymentType == PaymentType.CASH && cashAmount == null) {
             throw new InvalidDataException("cash amount can not be null when you pay with cash!");
         }
-        Purchase purchase = purchaseService.makePurchase(supermarketId, itemIDs, type, cashAmount);
+        Purchase purchase = purchaseService.makePurchase(supermarketId, itemIDs, paymentType, cashAmount);
         PurchaseDTO purchaseDTO = new PurchaseDTO(purchase.getPrice(), purchase.getChangeAmount(), purchase.getTimeOfPayment());
         return new ResponseEntity<>(purchaseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<PurchaseDTO>>getAll(){
+    public ResponseEntity<List<PurchaseDTO>> getAll() {
         List<PurchaseDTO> response = purchaseService.getAll().stream().
                 map(purchase -> new PurchaseDTO(purchase.getPrice(), purchase.getChangeAmount(),
                         purchase.getTimeOfPayment())).collect(Collectors.toList());

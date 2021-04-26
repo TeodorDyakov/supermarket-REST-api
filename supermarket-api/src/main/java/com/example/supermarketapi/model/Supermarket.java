@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class Supermarket extends BaseEntity {
 
     @NotBlank(message = "name can not be blank")
     @Column(unique = true)
+    @Size(max = 64)
     private String name;
     @NotBlank(message = "address not be blank")
     private String address;

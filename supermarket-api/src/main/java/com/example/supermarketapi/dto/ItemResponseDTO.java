@@ -1,6 +1,6 @@
 package com.example.supermarketapi.dto;
 
-import com.example.supermarketapi.model.ItemType;
+import com.example.supermarketapi.model.enums.ItemType;
 import lombok.Getter;
 import lombok.Setter;
 

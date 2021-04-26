@@ -5,7 +5,6 @@ import com.example.supermarketapi.dto.SupermarketInfoDTO;
 import com.example.supermarketapi.model.Supermarket;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SupermarketService {
 

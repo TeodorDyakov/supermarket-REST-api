@@ -2,8 +2,8 @@ package com.example.supermarketapi.service.impl;
 
 import com.example.supermarketapi.dto.SupermarketInfoDTO;
 import com.example.supermarketapi.model.Item;
-import com.example.supermarketapi.model.PaymentType;
 import com.example.supermarketapi.model.Purchase;
+import com.example.supermarketapi.model.enums.PaymentType;
 import com.example.supermarketapi.repository.PurchaseRepository;
 import com.example.supermarketapi.service.PurchaseService;
 import com.example.supermarketapi.service.SupermarketService;
@@ -20,7 +20,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private PurchaseRepository purchaseRepository;
 
     @Autowired
-    public PurchaseServiceImpl(SupermarketService supermarketService, PurchaseRepository purchaseRepository){
+    public PurchaseServiceImpl(SupermarketService supermarketService, PurchaseRepository purchaseRepository) {
         this.supermarketService = supermarketService;
         this.purchaseRepository = purchaseRepository;
     }
@@ -30,15 +30,15 @@ public class PurchaseServiceImpl implements PurchaseService {
         SupermarketInfoDTO supermarketInfoDTO = supermarketService.getSupermarketInfo(supermarketId);
         double price = 0.0;
 
-        for(String id : itemIDs){
-            for(Item item : supermarketInfoDTO.getItems()){
-                if(id.equals(item.getId())){
+        for (String id : itemIDs) {
+            for (Item item : supermarketInfoDTO.getItems()) {
+                if (id.equals(item.getId())) {
                     price += item.getPrice();
                 }
             }
         }
         double change = 0;
-        if(type == PaymentType.CASH) {
+        if (type == PaymentType.CASH) {
             change = cashAmount - price;
         }
         Purchase purchase = new Purchase();

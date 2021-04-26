@@ -2,6 +2,7 @@ package com.example.supermarketapi.controller;
 
 import com.example.supermarketapi.dto.AddItemsToSupermarketResponseDTO;
 import com.example.supermarketapi.dto.SupermarketInfoDTO;
+import com.example.supermarketapi.exception.InvalidDataException;
 import com.example.supermarketapi.model.Supermarket;
 import com.example.supermarketapi.service.SupermarketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class SupermarketController {
     @PostMapping
     public ResponseEntity<Supermarket> createSupermarket(@RequestParam String name, @RequestParam String address,
                                                          @RequestParam String phoneNumber, @RequestParam String workingHours) {
+        if(!phoneNumber.matches("08[7-9][0-9]{7}")){
+            throw new InvalidDataException("phone number is invalid!");
+        }
         Supermarket supermarket = new Supermarket();
         supermarket.setName(name);
         supermarket.setAddress(address);
